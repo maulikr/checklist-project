@@ -1,26 +1,23 @@
 {
     // Python interpreter path (relative to the project folder)
     "python.defaultInterpreterPath": ".venv/bin/python",
-
     // Formatting
     "python.formatting.provider": "black",
     "editor.formatOnSave": true,
     "editor.formatOnPaste": true,
-
+    // Remove the annoying dots
+    "editor.guides.indentation": false,
     // Import sorting
     "python.sortImports.path": "isort",
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit"
     },
-
     // Linting
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
     "python.linting.flake8Path": ".venv/bin/flake8",
-
     // Terminal uses bash by default on Ubuntu server
     "terminal.integrated.shell.linux": "/bin/bash",
-
     // Optional: show whitespace and enable word wrap
     "editor.renderWhitespace": "all",
     "editor.wordWrap": "on"
