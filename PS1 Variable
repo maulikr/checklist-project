@@ -24,11 +24,11 @@ ITALIC="\[\033[3m\]"
 RESET="\[\033[0m\]"
 
 # Final PS1 - colors optimized for readability
-export PS1="${DARK_RED}\u${RESET} ${DARK_BLUE}\w${RESET} ${MAROON}${ITALIC}\$(show_venv)${RESET} ${BOLD}${DARK_GREEN}\$(parse_git_branch)${RESET} ${MEDIUM_GRAY}\\$ ${RESET}"
+export PS1="${DARK_RED}\u${RESET} ${MEDIUM_GRAY}@ \h${RESET} ${DARK_BLUE}\w${RESET} ${MAROON}${ITALIC}\$(show_venv)${RESET} ${BOLD}${DARK_GREEN}\$(parse_git_branch)${RESET} ${MEDIUM_GRAY}\\$ ${RESET}"
 
 # Function to restore custom PS1
 restore_prompt() {
-    export PS1="${DARK_RED}\u${RESET} ${DARK_BLUE}\w${RESET} ${MAROON}${ITALIC}\$(show_venv)${RESET} ${BOLD}${DARK_GREEN}\$(parse_git_branch)${RESET} ${MEDIUM_GRAY}\\$ ${RESET}"
+    export PS1="${DARK_RED}\u${RESET} ${MEDIUM_GRAY}@ \h${RESET} ${DARK_BLUE}\w${RESET} ${MAROON}${ITALIC}\$(show_venv)${RESET} ${BOLD}${DARK_GREEN}\$(parse_git_branch)${RESET} ${MEDIUM_GRAY}\\$ ${RESET}"
 }
 
 # Restore prompt after any command (this will override virtualenv's PS1 changes)
