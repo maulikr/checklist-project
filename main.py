@@ -12,6 +12,10 @@ while True:
     match user_action:
         case '1':
             todo = input("Enter a to do: ") + "\n"
+
+            file = open("todos.txt", "r")
+            todos = file.readlines()
+
             todos.append(todo)
             txtfile = open("todos.txt", "a")
             txtfile.writelines(todo)
