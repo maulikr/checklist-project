@@ -15,11 +15,18 @@ while True:
 
             file = open("todos.txt", "r")
             todos = file.readlines()
+            file.close()
 
             todos.append(todo)
+
             txtfile = open("todos.txt", "a")
             txtfile.writelines(todo)
+            txtfile.close()
         case '2':
+            file = open("todos.txt", "r")
+            todos = file.readlines()
+            file.close()
+
             for (i, item) in enumerate(todos):
                 row = f"{i+1}.{item.capitalize()}"
                 print(row)
