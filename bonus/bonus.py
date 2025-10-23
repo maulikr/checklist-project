@@ -1,6 +1,9 @@
-filesnames = ["1.one.txt", "2.two.txt", "3.three.txt"]
+contents = ["Doc : All the contents go here.",
+            "Presentation : All the contents go here.",
+             "Report : All the contents go here."]
 
-for filename in filesnames:
-    filename = filename.replace(".", "-", 1)
-    print(filename)
-    
+filenames = ["doc.txt", "presentation.txt", "report.txt"]
+
+for content, filename in zip(contents, filenames):
+    file = open(f"{filename}", 'w')
+    file.write(content)

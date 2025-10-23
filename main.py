@@ -12,10 +12,21 @@ while True:
     match user_action:
         case '1':
             todo = input("Enter a to do: ") + "\n"
+
+            file = open("todos.txt", "r")
+            todos = file.readlines()
+            file.close()
+
             todos.append(todo)
+
             txtfile = open("todos.txt", "a")
             txtfile.writelines(todo)
+            txtfile.close()
         case '2':
+            file = open("todos.txt", "r")
+            todos = file.readlines()
+            file.close()
+
             for (i, item) in enumerate(todos):
                 row = f"{i+1}.{item.capitalize()}"
                 print(row)
@@ -34,5 +45,5 @@ while True:
             number = int(input("Number of todo list to complete: "))
             todos.pop(number - 1)
         case _ :
-            print("Exiting...!")
+            print("Exiting...")
             break
