@@ -1,4 +1,4 @@
-# Remote Python Development with VS Code & Ubuntu Server
+# Remote Python Development with vsCode & Ubuntu Server
 
 A step-by-step guide to set up VS Code on your desktop for remote Python development on an Ubuntu server (like Lenovo Tiny).
 
