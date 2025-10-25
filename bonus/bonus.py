@@ -1,9 +1,8 @@
-contents = ["Doc : All the contents go here.",
-            "Presentation : All the contents go here.",
-             "Report : All the contents go here."]
+password = input("Enter a password: ")
 
-filenames = ["doc.txt", "presentation.txt", "report.txt"]
-
-for content, filename in zip(contents, filenames):
-    file = open(f"{filename}", 'w')
-    file.write(content)
+if len(password) > 7:
+    print("Great password there!")
+elif len(password) = 7:
+    print("Password is OK, but not too strong.")
+else:
+    print("Your password is weak.")

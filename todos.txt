@@ -1,3 +1,4 @@
-run
 workout
 cardio
+run fast
+play
