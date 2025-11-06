@@ -1,133 +1,328 @@
-# Remote Python Development with vsCode & Ubuntu Server
+# Checklist Manager
 
-A step-by-step guide to set up VS Code on your desktop for remote Python development on an Ubuntu server (like Lenovo Tiny).
+A full-featured checklist application with web interface, command-line interface, and email functionality. Built with Python, Flask, Django, and MySQL.
 
-[[_TOC_]]
+![alt text](https://img.shields.io/badge/python-3.10+-blue.svg)
 
-## Prerequisites
+![alt text](https://img.shields.io/badge/flask-2.0+-green.svg)
 
-- VS Code on your desktop (Windows/macOS/Linux)
-- SSH access to your Lenovo Tiny (Ubuntu Server)
-- VS Code extensions:
-   - Remote - SSH (by Microsoft)
-   - Python (by Microsoft)
+![alt text](https://img.shields.io/badge/django-4.0+-darkgreen.svg)
 
-## Step-by-Step Setup
+![alt text](https://img.shields.io/badge/mysql-8.0-orange.svg)
 
-### Install and Configure SSH on Ubuntu Server
+## Features
 
-On your Ubuntu server:
+- Checklist Management: Create, read, update, and delete checklists and items
+- Web Interface: Access via Flask and Django web applications
+- Command Line Interface: Full functionality via terminal
+- Email Integration: Send checklists via email and receive reminders
+- MySQL Database: Persistent data storage with relationships
+- User Management: Multi-user support with authentication
 
-```bash
-sudo apt update
-sudo apt install openssh-server -y
-sudo systemctl enable ssh
-sudo systemctl start ssh
-```
+## Tech Stack
 
-Then check your server's IP address:
+- Backend: Python, Flask, Django
+- Database: MySQL
+- Frontend: HTML, CSS, JavaScript (Bootstrap)
+- Email: SMTP integration
+- CLI: Click or Argparse
 
-```bash
-ip a
-```
+## Quick Start
 
-You'll get something like 192.168.1.42.
+###Prerequisites
 
-Test the connection from your desktop:
+- Python 3.8+
+- MySQL 8.0+
+- pip (Python package manager)
 
-```bash
-ssh user@192.168.1.42
-```
+## Installation
 
-### Install VS Code + Remote SSH Extension
-
-In VS Code on your desktop:
-
-1. Go to Extensions `(Ctrl+Shift+X)`
-1. Search and install "**Remote - SSH**"
-1. Press `F1` → type "**Remote-SSH: Connect to Host...**"
-1. Add your server: `ssh user@192.168.1.42`
-
-This will open a new VS Code window connected to your Ubuntu server.
-
-### Install Python on Ubuntu Server
-
-If not already installed:
+**Clone the repository**
 
 ```bash
-sudo apt install python3 python3-venv python3-pip -y
+git clone https://github.com/yourusername/checklist-manager.git
+cd checklist-manager
+```
+**Set up virtual environment**
+
+`python -m venv venv`
+`source venv/bin/activate  # On Windows: venv\Scripts\activate`
+
+**Install dependencies**
+
+`pip install -r requirements.txt`
+
+**Configure environment variables**
+
+`cp .env.example .env`
+
+*Edit .env with your database and email settings*
+
+**Database setup**
+
+*Create MySQL database*
+`mysql -u root -p -e "CREATE DATABASE checklist_manager;"`
+
+*Run migrations*
+`python manage.py migrate  # Django`
+`python flask_db.py init   # Flask`
+
+### Run the application
+
+**Django development server**
+`python manage.py runserver`
+
+**Flask development server**
+`python flask_app.py`
+
+**Or use CLI**
+`python cli.py --help`
+
+
+## Usage
+### Web Interface
+
+Django App (http://localhost:8000)
+
+    Full-featured web interface
+
+    User authentication
+
+    REST API endpoints
+
+    Admin dashboard
+
+Flask App (http://localhost:5000)
+
+    Lightweight interface
+
+    Quick checklist operations
+
+    Email functionality
+
+Command Line Interface
+bash
+
+## Create a new checklist
+`python cli.py create "Shopping List"`
+
+## Add items to checklist
+```
+python cli.py add-item "Shopping List" "Milk"
+python cli.py add-item "Shopping List" "Eggs"
+python cli.py add-item "Shopping List" "Bread"
 ```
 
-Create a virtual environment for your project:
+## Mark items as complete
+python cli.py complete "Shopping List" "Milk"
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
+## View checklist
+python cli.py view "Shopping List"
+
+## Send checklist via email
+python cli.py email "Shopping List" --to user@example.com
+
+## List all checklists
+python cli.py list
+
+Email Features
+
+    Share checklists via email
+
+    Daily reminders for incomplete items
+
+    Progress reports with completion statistics
+
+    Export functionality to various formats
+
+## Database Schema
+```sql
+-- Users table
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Checklists table
+CREATE TABLE checklists (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(200) NOT NULL,
+    user_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Checklist items table
+CREATE TABLE checklist_items (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    checklist_id INT,
+    description TEXT NOT NULL,
+    is_completed BOOLEAN DEFAULT FALSE,
+    due_date DATE NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (checklist_id) REFERENCES checklists(id) ON DELETE CASCADE
+);
 ```
 
-### Install Python Extension on Remote Side
+## Configuration
+Environment Variables
 
-VS Code will automatically prompt to install the Python extension on the remote server.
+Create a .env file:
+```ini
+## Database
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=checklist_manager
+DB_USER=your_username
+DB_PASSWORD=your_password
 
-After installation:
+## Email (Gmail example)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASSWORD=your_app_password
+EMAIL_FROM=your_email@gmail.com
 
-1. Open any Python Project
-1. Press `Ctrl+Shift+P` → "**Python: Select Interpreter**"
-1. Choose the Python environment on the remote server (`/usr/bin/python3` or `.venv/bin/python`)
+## Application
+SECRET_KEY=your_secret_key
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
 
-### Done
+Flask Configuration
+python
 
-- All Python code runs on the Ubuntu server
-- VS Code on your desktop acts as a remote editor and debugger
-- Your desktop stays light and clean (no local Python, packages, etc.)
+## config.py
+class Config:
+    SQLALCHEMY_DATABASE_URI = f"mysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = os.getenv('SECRET_KEY')
 
-## Advanced SSH Configuration
+Django Configuration
+python
 
-The `C:\Users\Administrator\.ssh\config` file is where VS Code looks for SSH connection settings.
+## settings.py
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
+    }
+}
+```
 
-### Example SSH Config Entry
+## Project Structure
 
-Open the file and add:
 ```text
-Host ubuntu-tiny
-    HostName 192.168.1.42
-    User your_username
-    Port 22
-    IdentityFile C:\Users\Administrator\.ssh\id_rsa
+checklist-manager/
+├── django_app/                 # Django application
+│   ├── manage.py
+│   ├── checklist/
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── urls.py
+│   │   └── templates/
+│   └── config/
+│       └── settings.py
+├── flask_app/                  # Flask application
+│   ├── app.py
+│   ├── models.py
+│   ├── routes.py
+│   └── templates/
+├── cli/                        # Command line interface
+│   ├── cli.py
+│   ├── commands/
+│   └── utils.py
+├── core/                       # Shared functionality
+│   ├── database.py
+│   ├── email_service.py
+│   └── models.py
+├── requirements.txt
+├── .env.example
+└── README.md
 ```
 
-Then in VS Code:
+## Deployment
+Production with Gunicorn & Nginx
+```bash
+Install production server
+pip install gunicorn
 
-1. Press `F1`
-1. Choose "Remote-SSH: Connect to Host..."
-1. Select `ubuntu-tiny` (or whatever name you used)
+Run Django with Gunicorn
+gunicorn --bind 0.0.0.0:8000 config.wsgi:application
 
-VS Code will then connect via SSH and install the VS Code server on your Ubuntu Tiny.
+Run Flask with Gunicorn
+gunicorn --bind 0.0.0.0:5000 flask_app:app
+```
 
-### Optional: SSH Key Setup (Recommended)
+## Docker Deployment
+```dockerfile
+FROM python:3.9
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
+```
 
-Generate an SSH key to avoid typing your password every time:
-
-On your desktop:
+## Testing
 
 ```bash
-ssh-keygen -t rsa -b 4096
+Run Django tests
+python manage.py test
+
+Run Flask tests
+python -m pytest tests/
+
+Run CLI tests
+python -m pytest tests/test_cli.py
+
+Test email functionality
+python test_email.py
 ```
 
-Copy your public key to the server:
-```bash
-ssh-copy-id your_username@192.168.1.42
-```
-Or manually:
-```bash
-cat ~/.ssh/id_rsa.pub | ssh your_username@192.168.1.42 "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
-```
+## Email Templates
 
-## You're Ready!
+The application includes customizable email templates for:
 
-Now you can:
+- Checklist sharing
+- Daily reminders
+- Weekly progress reports
+- Completion notifications
 
-- Develop Python applications remotely
-- Use VS Code's full feature set (debugging, intellisense, etc.)
-- Keep your development environment separate from your desktop
-- Leverage server resources for computation-intensive tasks
+## Security Features
+
+- Password hashing
+- SQL injection prevention
+- XSS protection
+- CSRF tokens
+- Input validation
+- Secure headers
+
+## Contributing
+
+- Fork the repository
+- Create a feature branch (git checkout -b feature/amazing-feature)
+- Commit your changes (git commit -m 'Add amazing feature')
+- Push to the branch (git push origin feature/amazing-feature)
+- Open a Pull Request
+
+## License
+
+For support and questions:
+
+- Email: support@checklistmanager.com
+- Issues: GitHub Issues
+- Documentation: Wiki
+
+## Acknowledgments
+
+- Flask and Django communities
+- MySQL documentation
+- Contributors and testers
+
+Happy checklist management! ✅

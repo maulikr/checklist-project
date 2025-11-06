@@ -1,4 +1,2 @@
-workout
-cardio
-run fast
-play
+run
+walk
