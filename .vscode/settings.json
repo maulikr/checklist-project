@@ -1,5 +1,5 @@
 {
-    "workbench.colorTheme": "Quiet Light",
+    "workbench.colorTheme": "Default Light Modern",
     "remote.SSH.remotePlatform": {
         "192.168.2.4": "linux",
         "Ubuntu": "linux"
