@@ -325,4 +325,4 @@ For support and questions:
 - MySQL documentation
 - Contributors and testers
 
-Happy checklist management! ✅
+Happy checklist management!
